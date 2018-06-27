@@ -92,8 +92,8 @@ bintray {
     key = isHasFile ? properties.getProperty("bintray.apikey") : System.getenv("bintray.apikey")
     configurations = ['archives']
     pkg {
-        repo = "maven"
-        name = "toolbox"
+        repo = "toolbox"
+        name = "toolbox_for_java"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
