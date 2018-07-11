@@ -1,8 +1,11 @@
 package com.chaos;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Range;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -74,5 +77,35 @@ public interface LocalDateKit {
         Objects.requireNonNull(end);
         Objects.requireNonNull(biConsumer);
         CollectionOptional.ofEmpty(flatLocalDate(start, end)).each(biConsumer);
+    }
+
+    static List<Range<LocalDate>> range(List<String> localDateList) {
+        return range(localDateList, 1);
+    }
+
+    static List<Range<LocalDate>> range(List<String> localDateList, int allowableInterval) {
+        Objects.requireNonNull(localDateList);
+        Preconditions.checkArgument(allowableInterval > 0);
+        return localDateList.stream()
+                            .sorted()
+                            .map(LocalDate::parse)
+                            .reduce(new ArrayList<Range<LocalDate>>(), (dateRanges, date) -> {
+                                Range<LocalDate> dateRange;
+                                if (CollectionKit.isEmpty(dateRanges)) {
+                                    dateRanges.add(Range.singleton(date));
+                                } else {
+                                    dateRange = dateRanges.get(dateRanges.size() - 1);
+                                    int days = Days.daysBetween(dateRange.upperEndpoint(), date).getDays();
+                                    if (days > allowableInterval) {
+                                        dateRanges.add(Range.singleton(date));
+                                    } else {
+                                        dateRanges.set(dateRanges.size() - 1, Range.closed(dateRange.lowerEndpoint(), date));
+                                    }
+                                }
+                                return dateRanges;
+                            }, (dateRanges, dateRanges2) -> {
+                                dateRanges.addAll(dateRanges2);
+                                return dateRanges;
+                            });
     }
 }
