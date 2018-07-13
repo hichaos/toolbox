@@ -109,6 +109,12 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
         return CollectionKit.isEmpty(collection) ? c : collection;
     }
 
+    /**
+     * If values which every item applied @param function is same, return the value or null
+     * @param function
+     * @param <R>
+     * @return
+     */
     public <R> Optional<R> everySame(Function<? super ITEM, R> function) {
         if (null == collection) {
             return Optional.ofNullable(null);

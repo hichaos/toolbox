@@ -18,6 +18,13 @@ import java.util.stream.IntStream;
  */
 public interface LocalDateKit {
 
+    /**
+     * input: "2018-07-01", "2018-07-05"
+     * output: [LocalDate::2018-07-01, LocalDate::2018-07-02, LocalDate::2018-07-03, LocalDate::2018-07-04, LocalDate::2018-07-05]
+     * @param start
+     * @param end
+     * @return
+     */
     static List<LocalDate> flatLocalDate(String start, String end) {
         Objects.requireNonNull(start);
         Objects.requireNonNull(end);
@@ -26,6 +33,13 @@ public interface LocalDateKit {
         return flatLocalDate(startDate, endDate);
     }
 
+    /**
+     * input: LocalDate::2018-07-01, LocalDate::2018-07-05
+     * output: [LocalDate::2018-07-01, LocalDate::2018-07-02, LocalDate::2018-07-03, LocalDate::2018-07-04, LocalDate::2018-07-05]
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     static List<LocalDate> flatLocalDate(LocalDate startDate, LocalDate endDate) {
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
@@ -34,37 +48,80 @@ public interface LocalDateKit {
                         .collect(Collectors.toList());
     }
 
+    /**
+     * input: [LocalDate::2018-07-01, LocalDate::2018-07-02, LocalDate::2018-07-03, LocalDate::2018-07-04, LocalDate::2018-07-05]
+     * output: ["2018-07-01", "2018-07-02", "2018-07-03", "2018-07-04", "2018-07-05"]
+     * @param localDateList
+     * @return
+     */
     static List<String> format(List<LocalDate> localDateList) {
         Objects.requireNonNull(localDateList);
         return localDateList.stream().map(String::valueOf).collect(Collectors.toList());
     }
 
+    /**
+     * input: [LocalDate::2018-07-01, LocalDate::2018-07-02, LocalDate::2018-07-03, LocalDate::2018-07-04, LocalDate::2018-07-05], "yyyy-MM-dd"
+     * output: ["2018-07-01", "2018-07-02", "2018-07-03", "2018-07-04", "2018-07-05"]
+     * @param localDateList
+     * @param pattern
+     * @return
+     */
     static List<String> format(List<LocalDate> localDateList, String pattern) {
         Objects.requireNonNull(localDateList);
         Objects.requireNonNull(pattern);
         return localDateList.stream().map(localDate -> localDate.toString(pattern)).collect(Collectors.toList());
     }
 
+    /**
+     * input: [LocalDate::2018-07-01, LocalDate::2018-07-02, LocalDate::2018-07-03, LocalDate::2018-07-04, LocalDate::2018-07-05]
+     * output: LocalDate::2018-07-05
+     * @param localDateList
+     * @return
+     */
     static LocalDate maxDate(List<LocalDate> localDateList) {
         Objects.requireNonNull(localDateList);
         return LocalDate.parse(max(format(localDateList)));
     }
 
+    /**
+     * input: [LocalDate::2018-07-01, LocalDate::2018-07-02, LocalDate::2018-07-03, LocalDate::2018-07-04, LocalDate::2018-07-05]
+     * output: LocalDate::2018-07-01
+     * @param localDateList
+     * @return
+     */
     static LocalDate minDate(List<LocalDate> localDateList) {
         Objects.requireNonNull(localDateList);
         return LocalDate.parse(min(format(localDateList)));
     }
 
+    /**
+     * input: ["2018-07-01", "2018-07-02", "2018-07-03", "2018-07-04", "2018-07-05"]
+     * output: "2018-07-05"
+     * @param localDateList
+     * @return
+     */
     static String max(List<String> localDateList) {
         Objects.requireNonNull(localDateList);
         return localDateList.stream().max(Comparator.naturalOrder()).orElseThrow(IllegalStateException::new);
     }
 
+    /**
+     * input: ["2018-07-01", "2018-07-02", "2018-07-03", "2018-07-04", "2018-07-05"]
+     * output: "2018-07-01"
+     * @param localDateList
+     * @return
+     */
     static String min(List<String> localDateList) {
         Objects.requireNonNull(localDateList);
         return localDateList.stream().min(Comparator.naturalOrder()).orElseThrow(IllegalStateException::new);
     }
 
+    /**
+     * iterate from start to end with index
+     * @param start
+     * @param end
+     * @param biConsumer
+     */
     static void each(String start, String end, BiConsumer<Integer, String> biConsumer) {
         Objects.requireNonNull(start);
         Objects.requireNonNull(end);
@@ -72,6 +129,12 @@ public interface LocalDateKit {
         CollectionOptional.ofEmpty(format(flatLocalDate(start, end))).each(biConsumer);
     }
 
+    /**
+     * iterate from start to end with index
+     * @param start
+     * @param end
+     * @param biConsumer
+     */
     static void each(LocalDate start, LocalDate end, BiConsumer<Integer, LocalDate> biConsumer) {
         Objects.requireNonNull(start);
         Objects.requireNonNull(end);
@@ -79,10 +142,24 @@ public interface LocalDateKit {
         CollectionOptional.ofEmpty(flatLocalDate(start, end)).each(biConsumer);
     }
 
+    /**
+     * input: ["2018-07-01", "2018-07-02", "2018-07-03", "2018-07-05", "2018-07-06", "2018-07-09"]
+     * output: [Range::(2018-07-01, 2018-07-03), Range::(2018-07-05, 2018-07-06), Range::(2018-07-09, 2018-07-09)]
+     * @param localDateList
+     * @return
+     */
     static List<Range<LocalDate>> range(List<String> localDateList) {
         return range(localDateList, 1);
     }
 
+    /**
+     * input: ["2018-07-01", "2018-07-02", "2018-07-03", "2018-07-05", "2018-07-08", "2018-07-09"]
+     * input: 2
+     * output: [Range::(2018-07-01, 2018-07-05), Range::(2018-07-08, 2018-07-09)]
+     * @param localDateList
+     * @param allowableInterval
+     * @return
+     */
     static List<Range<LocalDate>> range(List<String> localDateList, int allowableInterval) {
         Objects.requireNonNull(localDateList);
         Preconditions.checkArgument(allowableInterval > 0);
