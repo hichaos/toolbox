@@ -133,4 +133,10 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
         }
         return Optional.ofNullable(result);
     }
+
+    public void ifPresent(Consumer<? super Collection<ITEM>> consumer) {
+        if (collection != null) {
+            consumer.accept(collection);
+        }
+    }
 }
