@@ -1,6 +1,7 @@
 package com.chaos;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ public interface CollectionKit {
         Map<KEY, List<VAL>> resultMap = new HashMap<>();
         splittedValList.forEach(splittedVals -> {
             CollectionOptional.ofEmpty(splittedVals).each((index, splittedVal) ->
-                resultMap.merge(keyList.get(index), Collections.singletonList(splittedVal), (oldVal, newVal) -> {
+                resultMap.merge(keyList.get(index), Lists.newArrayList(splittedVal), (oldVal, newVal) -> {
                     oldVal.addAll(newVal);
                     return oldVal;
                 }));
