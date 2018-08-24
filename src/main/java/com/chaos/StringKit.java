@@ -18,4 +18,12 @@ public interface StringKit {
     static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }
+
+    static String percentage(double value) {
+        return percentage(value, 0);
+    }
+
+    static String percentage(double value, int decimal) {
+        return String.format("%." + decimal + "f%%", value * 100);
+    }
 }
