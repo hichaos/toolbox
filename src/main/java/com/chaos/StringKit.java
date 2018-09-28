@@ -38,12 +38,12 @@ public interface StringKit {
         return Joiner.on(on).withKeyValueSeparator(separator).useForNull("null").join(map);
     }
 
-    static String serialize(List list) {
-        return serialize(list, ",");
+    static String serialize(Iterable iterable) {
+        return serialize(iterable, ",");
     }
 
-    static String serialize(List list, String on) {
-        return Joiner.on(on).join(list);
+    static String serialize(Iterable iterable, String on) {
+        return Joiner.on(on).join(iterable);
     }
 
     /**
