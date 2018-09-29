@@ -18,6 +18,10 @@ public interface CollectionKit {
         return !isEmpty(coll);
     }
 
+    static <ITEM> List<List<ITEM>> dichotomizeList(List<ITEM> itemList) {
+        return splitList(itemList, itemList.size()/2+1);
+    }
+
     static <ITEM> List<List<ITEM>> splitList(List<ITEM> itemList, int splitSize) {
         Preconditions.checkArgument(splitSize > 0);
         Preconditions.checkNotNull(itemList);
