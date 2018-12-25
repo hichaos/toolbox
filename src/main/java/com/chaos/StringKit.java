@@ -1,7 +1,11 @@
 package com.chaos;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
 
 import java.util.*;
 
@@ -84,6 +88,15 @@ public interface StringKit {
             });
         });
         return serialize(new ArrayList(hostPortSet));
+    }
+
+    static int consistentHash(int buckets, String... input) {
+        HashFunction hashing = Hashing.murmur3_128();
+        Hasher hasher = hashing.newHasher();
+        for (String i : input) {
+            hasher.putString(i, Charsets.UTF_8);
+        }
+        return Hashing.consistentHash(hasher.hash().asLong(), buckets);
     }
 
     static void main(String... a) {
