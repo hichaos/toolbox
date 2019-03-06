@@ -185,4 +185,8 @@ public interface LocalDateKit {
                                 return dateRanges;
                             });
     }
+
+    static LocalDate transform2JodaLocalDate(java.time.LocalDate localDate) {
+        return new LocalDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+    }
 }
