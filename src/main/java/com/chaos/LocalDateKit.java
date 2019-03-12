@@ -186,7 +186,7 @@ public interface LocalDateKit {
                             });
     }
 
-    static LocalDate transform2JodaLocalDate(java.time.LocalDate localDate) {
+    static LocalDate convert2JodaLocalDate(java.time.LocalDate localDate) {
         return new LocalDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
     }
 }
