@@ -52,19 +52,19 @@ public interface StringKit {
         return String.format("%." + decimal + "f%%", value * 100);
     }
 
-    static String serialize(Map map) {
-        return serialize(map, ",", "=");
+    static String stringify(Map map) {
+        return stringify(map, ",", "=");
     }
 
-    static String serialize(Map map, String on, String separator) {
+    static String stringify(Map map, String on, String separator) {
         return Joiner.on(on).withKeyValueSeparator(separator).useForNull("null").join(map);
     }
 
-    static String serialize(Iterable iterable) {
-        return serialize(iterable, ",");
+    static String stringify(Iterable iterable) {
+        return stringify(iterable, ",");
     }
 
-    static String serialize(Iterable iterable, String on) {
+    static String stringify(Iterable iterable, String on) {
         return Joiner.on(on).join(iterable);
     }
 
@@ -87,7 +87,7 @@ public interface StringKit {
                 }
             });
         });
-        return serialize(new ArrayList(hostPortSet));
+        return stringify(new ArrayList(hostPortSet));
     }
 
     static int consistentHash(int buckets, String... input) {
