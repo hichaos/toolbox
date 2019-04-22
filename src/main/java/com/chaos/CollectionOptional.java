@@ -139,4 +139,11 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
             consumer.accept(collection);
         }
     }
+
+    public void ifSingleton(Consumer<ITEM> consumer) {
+        ITEM item;
+        if (collection != null && !collection.isEmpty() && (item = collection.iterator().next()) != null ) {
+            consumer.accept(item);
+        }
+    }
 }
