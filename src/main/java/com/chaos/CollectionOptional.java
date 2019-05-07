@@ -1,9 +1,6 @@
 package com.chaos;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -82,14 +79,23 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
         }
     }
 
+    /**
+     * filterNulls useless
+     */
     public ITEM firstOrDefault(ITEM item) {
         return getOrDefault(0, item);
     }
 
+    /**
+     * filterNulls useless
+     */
     public Optional<ITEM> first() {
         return Optional.ofNullable(getOrDefault(0, null));
     }
 
+    /**
+     * filterNulls useless
+     */
     @SuppressWarnings("unchecked")
     public ITEM getOrDefault(int index, ITEM item) {
         if (null == collection) {
@@ -101,10 +107,16 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
         return (ITEM)(collection.toArray()[index]);
     }
 
+    /**
+     * filterNulls useless
+     */
     public Optional<ITEM> get(int index) {
         return Optional.ofNullable(getOrDefault(index, null));
     }
 
+    /**
+     * filterNulls useless
+     */
     public C orElse(C c) {
         return CollectionKit.isEmpty(collection) ? c : collection;
     }
@@ -134,6 +146,9 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
         return Optional.ofNullable(result);
     }
 
+    /**
+     * filterNulls useless
+     */
     public void ifPresent(Consumer<? super Collection<ITEM>> consumer) {
         if (collection != null) {
             consumer.accept(collection);
@@ -141,9 +156,17 @@ public class CollectionOptional<C extends Collection<ITEM>, ITEM> {
     }
 
     public void ifSingleton(Consumer<ITEM> consumer) {
-        ITEM item;
-        if (collection != null && !collection.isEmpty() && (item = collection.iterator().next()) != null ) {
-            consumer.accept(item);
+        List<ITEM> list = new ArrayList<>();
+        if (collection != null && !collection.isEmpty()) {
+            for (ITEM t : this.collection) {
+                if (this.filterNulls && null == t) {
+                    continue;
+                }
+                list.add(t);
+            }
+        }
+        if (list.size() == 1) {
+            consumer.accept(list.get(0));
         }
     }
 }
